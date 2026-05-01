@@ -20,6 +20,75 @@
         .font-serif { font-family: 'Playfair Display', serif; }
         .font-handwriting { font-family: 'Permanent Marker', cursive; }
 
+
+
+        /* Loader Styles */
+        #loader-wrapper {
+            position: fixed;
+            inset: 0;
+            background: #0a0a0a;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s cubic-bezier(0.65, 0, 0.35, 1), visibility 0.8s;
+        }
+
+        .camera-icon {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .aperture {
+            width: 100%;
+            height: 100%;
+            border: 4px solid var(--gold);
+            border-radius: 50%;
+            position: relative;
+            animation: rotateAperture 2s infinite linear;
+        }
+
+        .aperture::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: var(--gold);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: shutterClick 1s infinite ease-in-out;
+        }
+
+        @keyframes rotateAperture {
+            0% { transform: rotate(0deg); border-style: solid; }
+            50% { border-style: dashed; }
+            100% { transform: rotate(360deg); border-style: solid; }
+        }
+
+        @keyframes shutterClick {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(0.4); opacity: 0.5; }
+        }
+
+        .loader-text {
+            font-size: 10px;
+            letter-spacing: 0.6em;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: bold;
+            animation: pulseText 1.5s infinite;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
         .parallax-bg {
             background-attachment: fixed;
             background-position: center;
@@ -61,7 +130,15 @@
         }
     </style>
 </head>
-<body>
+<body class="overflow-hidden"> <!-- Prevent scroll while loading -->
+
+    <!-- Page Loader -->
+    <div id="loader-wrapper">
+        <div class="camera-icon">
+            <div class="aperture"></div>
+        </div>
+        <div class="loader-text">Developing Moments</div>
+    </div>
 
     <!-- Fixed Navigation -->
     <nav class="fixed top-0 w-full z-[100] bg-black/95 backdrop-blur-lg border-b border-white/5 px-8 py-5">
@@ -106,7 +183,7 @@
                 <p class="text-gray-400 text-lg max-w-md mb-10 leading-relaxed">We don't just take photos; we curate your life's most precious fragments into a visual masterpiece.</p>
                 <div class="flex gap-6 justify-center lg:justify-start">
                     <div class="w-16 h-[1px] bg-[#D4AF37] self-center"></div>
-                    <span class="text-xs uppercase tracking-[0.5em] font-bold">Est. 2015</span>
+                    <span class="text-xs uppercase tracking-[0.5em] font-bold">Est. 1987</span>
                 </div>
             </div>
 
@@ -158,7 +235,7 @@
                 <h2 class="text-[#D4AF37] font-bold uppercase tracking-[0.3em] mb-6 text-sm">Behind the Lens</h2>
                 <h3 class="font-serif text-5xl font-bold mb-10 text-white">Crafting Gold from Light</h3>
                 <p class="text-gray-400 mb-8 leading-relaxed text-lg">
-                    Founded in 1980, Pinky Studio has become a sanctuary for high-end photography. We specialize in luxury weddings, editorial portraits, and cinematic events.
+                    Founded in 1987, Pinky Studio has become a sanctuary for high-end photography. We specialize in luxury weddings, editorial portraits, and cinematic events.
                 </p>
                 <ul class="space-y-6 mb-10">
                     <li class="flex items-center gap-4">
@@ -373,12 +450,25 @@
                 </div>
             </div>
             <div class="w-full h-[1px] bg-white/5 max-w-sm mx-auto mb-12"></div>
-            <p class="text-[10px] text-gray-700 uppercase tracking-[0.5em]">&copy; 2024 Pinky Studio Photography. Curated by Gold & Light. <br>
-            Developed with ❤️ by Naomi Studios</p>
+            <p class="text-[10px] text-gray-700 uppercase tracking-[0.5em]">&copy; 1987 Pinky Studio Photography.<br>
+            Powered by AppVertex <br> Built by Sid</p>
         </div>
     </footer>
 
     <script>
+
+         // Page Loader Control
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader-wrapper');
+            // Slight delay to ensure animation feels "deliberate"
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                loader.style.visibility = 'hidden';
+                document.body.classList.remove('overflow-hidden');
+            }, 1500);
+        });
+
+
         // Scroll Reveal Logic
         const observerOptions = {
             threshold: 0.1
